@@ -8,7 +8,7 @@ class Parser:
             3: {'+': 'R4', '*': 'R4', ')': 'R4', '$': 'R4'},
             4: {'id': 'S5', '(': 'S4', 'E': 8, 'T': 2, 'F': 3},
             5: {'+': 'R6', '*': 'R6', ')': 'R6', '$': 'R6'},
-            6: {'id': 'S5', '(': 'S4', 'E': 9, 'T': 3},
+            6: {'id': 'S5', '(': 'S4', 'T': 9, 'F': 3},
             7: {'id': 'S5', '(': 'S4', 'F': 10},
             8: {'+': 'S6', ')': 'S11'},
             9: {'+': 'R1', '*': 'S7', ')': 'R1', '$': 'R1'},
@@ -44,57 +44,82 @@ class Parser:
         return "String is not accepted"
 
     def apply_reduction(self, action):
+    # Define reductions based on your grammar
         if action == 'R1':  # E → E + T
             # Pop T, +, E
-            for _ in range(3):
-                self.stack.pop()  # Pop state and symbol alternately
-            left_E_state = self.stack[-1]  # Check the state after popping
+            for _ in range(6):
+                self.stack.pop()
+            left_state = self.stack[-1]
             self.stack.append('E')
-            self.stack.append(self.table[left_E_state]['E'])
+            next_state = self.table[left_state].get('E')
+            if next_state is None:
+                print(f"Error: No transition defined for 'E' in state {left_state}")
+                return
+            self.stack.append(next_state)
 
         elif action == 'R2':  # E → T
             # Pop T
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop T
-            T_state = self.stack[-1]
+            for _ in range(2):
+                self.stack.pop()
+            left_state = self.stack[-1]
             self.stack.append('E')
-            self.stack.append(self.table[T_state]['E'])
+            next_state = self.table[left_state].get('E')
+            if next_state is None:
+                print(f"Error: No transition defined for 'E' in state {left_state}")
+                return
+            self.stack.append(next_state)
 
         elif action == 'R3':  # T → T * F
             # Pop F, *, T
-            for _ in range(3):
-                self.stack.pop()  # Pop state and symbol alternately
-            left_T_state = self.stack[-1]  # Check the state after popping
+            for _ in range(6):
+                self.stack.pop()
+            left_state = self.stack[-1]
             self.stack.append('T')
-            self.stack.append(self.table[left_T_state]['T'])
+            next_state = self.table[left_state].get('T')
+            if next_state is None:
+                print(f"Error: No transition defined for 'T' in state {left_state}")
+                return
+            self.stack.append(next_state)
 
         elif action == 'R4':  # T → F
             # Pop F
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop F
-            F_state = self.stack[-1]
+            for _ in range(2):
+                self.stack.pop()
+            left_state = self.stack[-1]
             self.stack.append('T')
-            self.stack.append(self.table[F_state]['T'])
+            next_state = self.table[left_state].get('T')
+            if next_state is None:
+                print(f"Error: No transition defined for 'T' in state {left_state}")
+                return
+            self.stack.append(next_state)
 
         elif action == 'R5':  # F → (E)
             # Pop ), E, (
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop )
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop E
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop (
-            E_state = self.stack[-1]
+            for _ in range(6):
+                self.stack.pop()
+            left_state = self.stack[-1]
             self.stack.append('F')
-            self.stack.append(self.table[E_state]['F'])
+            next_state = self.table[left_state].get('F')
+            if next_state is None:
+                print(f"Error: No transition defined for 'F' in state {left_state}")
+                return
+            self.stack.append(next_state)
 
         elif action == 'R6':  # F → id
-            # Pop id
-            self.stack.pop()  # Pop state
-            self.stack.pop()  # Pop id
-            id_state = self.stack[-1]
+            # Pop id and its state
+            for _ in range(2):
+                self.stack.pop()
+            if not self.stack:
+                print("Error: Stack is empty after popping 'id'.")
+                return
+            left_state = self.stack[-1]
             self.stack.append('F')
-            self.stack.append(self.table[id_state]['F'])
+            next_state = self.table[left_state].get('F')
+            if next_state is None:
+                print(f"Error: No transition defined for 'F' in state {left_state}")
+                return
+            self.stack.append(next_state)
+
 
 
 def main():
