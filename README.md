@@ -2,8 +2,7 @@
 This program simulates the parsing process of input strings consisting of identifiers, operators, and parentheses according to a given context-free grammar, utilizing a stack-based approach to track the parsing state and outputting whether each input string is accepted or not based on the grammar rules and parsing decisions.
 
 Features:
-  - The program prompts the user to enter an input string
-
+  - The program parses each string iteratively, processing a list of input strings one by one.
 Parsing Initialization: It initializes the parse stack with the start state "0" and starts parsing the input string.
 Parsing Loop: The program iterates through the input string character by character.
 It checks the current state from the top of the parse stack and the current input symbol.
