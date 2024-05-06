@@ -3,6 +3,7 @@ This program simulates the parsing process of input strings consisting of identi
 
 Features:
   - The program parses each string iteratively, processing a list of input strings one by one.
+
 Parsing Initialization: It initializes the parse stack with the start state "0" and starts parsing the input string.
 Parsing Loop: The program iterates through the input string character by character.
 It checks the current state from the top of the parse stack and the current input symbol.
